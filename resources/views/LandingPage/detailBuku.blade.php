@@ -1,5 +1,6 @@
 @extends('layouts.LandingPageApp')
 @section('content')
+    <link rel="stylesheet" href="{{ asset('sweetalert2.min\sweetalert2.min.css') }}">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-8">
@@ -28,11 +29,17 @@
                             <!-- Empty heart icon -->
                             @php
                                 $user = Auth::user();
-                                $kaloFav = $user
-                                    ->favoritBy()
-                                    ->where('buku_id', $buku->id)
-                                    ->exists();
+
+                                if ($user) {
+                                    $kaloFav = $user
+                                        ->favoritBy()
+                                        ->where('buku_id', $buku->id)
+                                        ->exists();
+                                } else {
+                                    $kaloFav = false;
+                                }
                             @endphp
+
                             @if (!$kaloFav)
                                 <a href="#" id="tambahFavorit" class="btn btn-primary heart-icon like"
                                     data-id="{{ Crypt::encrypt($buku->id) }}">
@@ -56,20 +63,93 @@
             </div>
         </div>
         <div class="mt-5">
-            <div class="fs-4">
-                ULASAN
-            </div>
-            <div class="row p-0">
-                <div class="col-10">
-                    <input class="form-control" type="text" name="" id="">
+            @php
+                if (Auth::user()) {
+                    $komentarCheck = Auth::user()
+                        ->komentarBy()
+                        ->where('buku_id', $buku->id)
+                        ->first();
+                } else {
+                    $komentarCheck = false;
+                }
+                // dd($komentarCheck);
+            @endphp
+            @if (!$komentarCheck)
+                <div class="fs-4">
+                    ULASAN
                 </div>
-                <div class="col-2">
-                    <div class="btn btn-primary">kirim</div>
+                @if (Auth::user())
+                    <form action="{{ route('kirimKomentar') }}" method="post">
+                        @csrf
+                        <div class="row p-0">
+                            <div class="col-11">
+                                <input class="form-control" type="text" name="komentar" id=""
+                                    placeholder="tulis komentarmu">
+                                <input type="hidden" name="buku_id" value="{{ Crypt::encrypt($buku->id) }}">
+                            </div>
+                            <div class="col-1">
+                                <button type="submit" class="btn btn-primary">kirim</button>
+                            </div>
+                        </div>
+                    </form>
+                @endif
+            @else
+                <div class="fs-4">
+                    ULASAN SAYA
                 </div>
-            </div>
+                {{-- <form action="{{ route('kirimKomentar') }}" method="post">
+                    @csrf
+                    <div class="row p-0">
+                        <div class="col-10">
+                            <input class="form-control" type="text" name="komentar" id=""
+                                placeholder="tulis komentarmu">
+                            <input type="hidden" name="buku_id" value="{{ Crypt::encrypt($buku->id) }}">
+                        </div>
+                        <div class="col-2">
+                            <button type="submit" class="btn btn-primary">kirim</button>
+                        </div>
+                    </div>
+                </form> --}}
+                <div class="row">
+                    <div class="col-1 col-md-1  mt-4">
+                        <img src="{{ asset('image\books\image\309236075_389292920078152_3685238632251069126_n.jpg') }}"
+                            alt="" class="img-fluid" srcset="" width="70px">
+                    </div>
+                    <div class="col-11 mt-3">
+                        <textarea style="resize: none;" readonly class="form-control" name="" id="" cols="2"
+                            rows="3">{{ $komentarCheck->komentar }}</textarea>
+                    </div>
+                </div>
+            @endif
+
+            <hr>
+            @php
+                $allKomentar = \App\Models\KomentarModel::where('buku_id', $buku->id)
+                    ->where('user_id', '!=', Auth::id())
+                    ->get();
+            @endphp
+            @foreach ($allKomentar as $item)
+                <div class="row">
+                    <div class="col-1 col-md-1  mt-4">
+                        <img src="{{ asset('image\books\image\309236075_389292920078152_3685238632251069126_n.jpg') }}"
+                            alt="" class="img-fluid" srcset="" width="70px">
+                    </div>
+                    <div class="col-11 mt-3">
+                        <div class="card">
+                            <div class="fs-5 p-2">
+                                {{ $item->komentarOleh->name }}
+                            </div>
+                            <p class="text-break p-2">
+                                {{ $item->komentar }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            @endforeach
         </div>
     </div>
     <script src="{{ asset('jquey/dist/jquery.min.js') }}"></script>
+    <script src="{{ asset('sweetalert2.min\sweetalert2.min.js') }}"></script>
     <script>
         $(document).ready(function() {
             $.ajaxSetup({
@@ -94,7 +174,10 @@
                         window.location.reload();
                     },
                     error: function(err) {
-
+                        swal.fire({
+                            icon: 'error',
+                            text: 'silahkan login dahulu',
+                        });
                     },
                 });
             });

@@ -65,6 +65,8 @@ route::group(['middleware' => 'role:user'], function () {
     route::get('/DetailBuku/baca/{id}', [LandingPageController::class, 'baca'])->name('bacaBuku');
     route::post('daftar-member', [LandingPageController::class, 'daftarMember'])->name('daftarMember');
     route::post('favorit', [LandingPageController::class, 'favorit'])->name('favorit');
+    route::get('daftar-favorit', [LandingPageController::class, 'FavList'])->name('favoritList');
+    route::post('kirim-komentar', [LandingPageController::class, 'komentar'])->name('kirimKomentar');
 });
 
 route::group(['middleware' => 'auth'], function () {

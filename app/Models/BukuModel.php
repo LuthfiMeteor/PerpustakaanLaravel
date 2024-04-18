@@ -19,4 +19,8 @@ class BukuModel extends Model
     {
         return $this->hasOne(FavoritModel::class, 'id', 'buku_id');
     }
+    public function komentar()
+    {
+        return $this->hasOne(KomentarModel::class, 'buku_id', 'id');
+    }
 }

@@ -48,4 +48,8 @@ class User extends Authenticatable
     {
         return $this->hasOne(FavoritModel::class, 'user_id', 'id');
     }
+    public function komentarBy()
+    {
+        return $this->hasOne(KomentarModel::class, 'user_id', 'id');
+    }
 }

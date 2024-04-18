@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\BukuModel;
 use App\Models\FavoritModel;
+use App\Models\KomentarModel;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -81,6 +82,29 @@ class LandingPageController extends Controller
                 );
             }
             // dd($fav);
+        } catch (\Throwable $th) {
+        }
+    }
+    public function favList()
+    {
+        $favorit = DB::table('favorit')
+            ->join('users', 'favorit.user_id', '=', 'users.id')
+            ->join('buku', 'favorit.buku_id', '=', 'buku.id')
+            ->where('favorit.user_id', Auth::id())
+            ->get();
+        // dd($favorit);
+        return view('LandingPage.favorit', compact('favorit'));
+    }
+    public function komentar(Request $request)
+    {
+        try {
+            $decrypted = Crypt::decrypt($request->buku_id);
+            $komentar = KomentarModel::create([
+                'user_id' => Auth::id(),
+                'buku_id' => $decrypted,
+                'komentar' => $request->komentar,
+            ]);
+            return back();
         } catch (\Throwable $th) {
         }
     }

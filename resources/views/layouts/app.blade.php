@@ -156,6 +156,13 @@
         <main class="">
             @yield('content')
         </main>
+        <div class="container-fluid sticky-bottom bg-secondary">
+            <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
+                <div class="col-md-4 d-flex align-items-center">
+                    <span class="mb-3 mb-md-0 text-muted">&copy; Buat Ujikom 2024</span>
+                </div>
+            </footer>
+        </div>
     </div>
     <script src="{{ asset('popper/core/dist/umd/popper.min.js') }}"></script>
     <script src="{{ asset('jquey/dist/jquery.min.js') }}"></script>

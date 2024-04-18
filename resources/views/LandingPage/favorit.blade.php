@@ -2,10 +2,10 @@
 @section('content')
     <div class="container">
         <div class="fs-2 fw-bold text-center">
-            DAFTAR BUKU
+            DAFTAR FAVORIT
         </div>
         <div class="row mt-2">
-            @foreach ($buku as $item)
+            @foreach ($favorit as $item)
                 <div class="col-sm-3 col-md-4 col-xl-2 mb-2 col-6">
                     <div class="card">
                         <style>
@@ -30,8 +30,12 @@
                                     srcset="" class=" img-fluid">
                             </div>
                             <div class="p-1">
+                                <a class="btn heart-icon unlike float-end" data-id="{{ Crypt::encrypt($item->id) }}">
+                                    <img src="{{ asset('tabler-icons-2.45.0/png/heart-filled.png') }}" width="20px"
+                                        alt="">
+                                </a>
                                 <div class="fs-5 fw-bold">
-                                    {{ $item->judul }}
+                                    KANCIL
                                 </div>
                                 <a class="link-underline-primary"
                                     href="{{ route('detailBuku', [Crypt::encrypt($item->id)]) }}">
@@ -45,3 +49,32 @@
         </div>
     </div>
 @endsection
+@push('script')
+    <script src="{{ asset('jquey/dist/jquery.min.js') }}"></script>
+    <script>
+        $(document).ready(function() {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $('.unlike').click(function() {
+                // console.log(1);
+                const id = $(this).data('id');
+                $.ajax({
+                    url: '{{ route('favorit') }}',
+                    type: 'post',
+                    data: {
+                        id: id
+                    },
+                    success: function(res) {
+                        window.location.reload();
+                    },
+                    error: function(err) {
+
+                    }
+                })
+            })
+        })
+    </script>
+@endpush
