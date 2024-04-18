@@ -136,6 +136,11 @@
                                             Dashboard
                                         </a>
                                     @endrole
+                                    @role('petugas')
+                                        <a class="dropdown-item" href="{{ route('home') }}">
+                                            Dashboard
+                                        </a>
+                                    @endrole
                                     @role('user')
                                         <a class="dropdown-item" href="{{ route('home') }}">
                                             Favorit

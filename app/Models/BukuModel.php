@@ -15,4 +15,8 @@ class BukuModel extends Model
     {
         return $this->belongsTo(KategoriModel::class, 'kategori', 'id');
     }
+    public function favorit()
+    {
+        return $this->hasOne(FavoritModel::class, 'id', 'buku_id');
+    }
 }

@@ -103,8 +103,14 @@
                                 <li><a class="dropdown-item {{ Request::route()->getName() == 'ManagemenKategori' ? 'active' : '' }}"
                                         href="{{ route('managemenKategori') }}">Kelola Kategori</a>
                                 </li>
-                                <li><a class="dropdown-item {{ Request::route()->getName() == 'managemenBuku' ? 'active' : ''}}" href="{{ route('managemenBuku') }}">Kelola Buku</a></li>
-
+                                <li><a class="dropdown-item {{ Request::route()->getName() == 'managemenBuku' ? 'active' : '' }}"
+                                        href="{{ route('managemenBuku') }}">Kelola Buku</a></li>
+                                <li><a class="dropdown-item {{ Request::route()->getName() == 'laporanBuku' ? 'active' : '' }}"
+                                        href="{{ route('laporanBuku') }}">Laporan</a></li>
+                                @role('admin')
+                                    <li><a class="dropdown-item {{ Request::route()->getName() == 'managemenPetugas' ? 'active' : '' }}"
+                                            href="{{ route('managemenPetugas') }}">Kelola Petugas</a></li>
+                                @endrole
                             </ul>
                         </li>
                     </ul>
