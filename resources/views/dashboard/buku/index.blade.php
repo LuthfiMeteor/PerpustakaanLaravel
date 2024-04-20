@@ -62,6 +62,10 @@
                             <input type="text" name="judul" class="form-control">
                         </div>
                         <div class="mb-3">
+                            <label for="">Deskripsi</label>
+                            <textarea name="deskripsi" id="editor" cols="30" rows="10"></textarea>
+                        </div>
+                        <div class="mb-3">
                             <label for="kategori">kategori</label>
                             <select name="kategori" id="" class="form-select">
                                 <option value="" selected>Pilih Kategori</option>
@@ -124,8 +128,14 @@
     <script src="{{ asset('jquey/dist/jquery.min.js') }}"></script>
     <script src="{{ asset('datatables/datatables.js') }}"></script>
     <script src="{{ asset('sweetalert2.min\sweetalert2.min.js') }}"></script>
+    <script src="{{ asset('ckeditor5-build-classic/ckeditor.js') }}"></script>
     <script>
         $(document).ready(function() {
+            ClassicEditor
+                .create(document.querySelector('#editor'))
+                .catch(error => {
+                    console.error(error);
+                });
             $('.table').DataTable({
                 processing: true,
                 serverSide: true,
@@ -210,4 +220,12 @@
             });
         });
     </script>
+    @if (session('success'))
+        <script>
+            Swal.fire({
+                icon: 'success',
+                text: 'sukses tambah buku'
+            })
+        </script>
+    @endif
 @endpush

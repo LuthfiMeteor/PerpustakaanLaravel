@@ -11,7 +11,7 @@
                     </div>
                     <div class="col-lg-8 mt-4 mt-lg-0 text-break">
                         <div class="fs-2 fw-bold mb-1 ">{{ $buku->judul }}</div>
-                        <ul class=" fs-3">
+                        <ul class=" fs-5">
                             <li style="list-style: square">Penulis &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :
                                 {{ $buku->penulis }}
                             </li>
@@ -22,6 +22,9 @@
                             <li style="list-style: square">Tahun Terbit :
                                 {{ date('d-m-Y', strtotime($buku->tahunTerbit)) }}</li>
                         </ul>
+                        <small>
+                            {!! $buku->deskripsi !!}
+                        </small>
                         <br>
                         <br>
                         <br>
@@ -74,30 +77,31 @@
                 }
                 // dd($komentarCheck);
             @endphp
-            @if (!$komentarCheck)
-                <div class="fs-4">
-                    ULASAN
-                </div>
-                @if (Auth::user())
-                    <form action="{{ route('kirimKomentar') }}" method="post">
-                        @csrf
-                        <div class="row p-0">
-                            <div class="col-11">
-                                <input class="form-control" type="text" name="komentar" id=""
-                                    placeholder="tulis komentarmu">
-                                <input type="hidden" name="buku_id" value="{{ Crypt::encrypt($buku->id) }}">
+            @role('user')
+                @if (!$komentarCheck)
+                    <div class="fs-4">
+                        ULASAN
+                    </div>
+                    @if (Auth::user())
+                        <form action="{{ route('kirimKomentar') }}" method="post">
+                            @csrf
+                            <div class="row p-0">
+                                <div class="col-11">
+                                    <input class="form-control" type="text" name="komentar" id=""
+                                        placeholder="tulis komentarmu">
+                                    <input type="hidden" name="buku_id" value="{{ Crypt::encrypt($buku->id) }}">
+                                </div>
+                                <div class="col-1">
+                                    <button type="submit" class="btn btn-primary">kirim</button>
+                                </div>
                             </div>
-                            <div class="col-1">
-                                <button type="submit" class="btn btn-primary">kirim</button>
-                            </div>
-                        </div>
-                    </form>
-                @endif
-            @else
-                <div class="fs-4">
-                    ULASAN SAYA
-                </div>
-                {{-- <form action="{{ route('kirimKomentar') }}" method="post">
+                        </form>
+                    @endif
+                @else
+                    <div class="fs-4">
+                        ULASAN SAYA
+                    </div>
+                    {{-- <form action="{{ route('kirimKomentar') }}" method="post">
                     @csrf
                     <div class="row p-0">
                         <div class="col-10">
@@ -110,18 +114,20 @@
                         </div>
                     </div>
                 </form> --}}
-                <div class="row">
-                    <div class="col-1 col-md-1  mt-4">
-                        <img src="{{ asset('image\books\image\309236075_389292920078152_3685238632251069126_n.jpg') }}"
-                            alt="" class="img-fluid" srcset="" width="70px">
+                    <div class="row">
+                        <div class="col-1 col-md-1  mt-4">
+                            <img src="{{ asset('image\books\image\309236075_389292920078152_3685238632251069126_n.jpg') }}"
+                                alt="" class="img-fluid" srcset="" width="70px">
+                        </div>
+                        <div class="col-11 mt-3">
+                            <textarea style="resize: none;" readonly class="form-control" name="" id="" cols="2"
+                                rows="3">{{ $komentarCheck->komentar }}</textarea>
+                        </div>
                     </div>
-                    <div class="col-11 mt-3">
-                        <textarea style="resize: none;" readonly class="form-control" name="" id="" cols="2"
-                            rows="3">{{ $komentarCheck->komentar }}</textarea>
-                    </div>
-                </div>
-            @endif
+                @endif
+            @endrole
 
+            <div class="fs-4 mt-2">SEMUA ULASAN</div>
             <hr>
             @php
                 $allKomentar = \App\Models\KomentarModel::where('buku_id', $buku->id)

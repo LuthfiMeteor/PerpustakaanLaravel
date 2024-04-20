@@ -21,6 +21,10 @@
                         <input type="text" name="judul" value="{{ $buku->judul }}" class="form-control">
                     </div>
                     <div class="mb-3 col-6">
+                        <label for="">Deskripsi</label>
+                        <textarea name="deskripsi" id="editor" cols="30" rows="10">{{ $buku->deskripsi }}</textarea>
+                    </div>
+                    <div class="mb-3 col-6">
                         <label for="kategori">kategori</label>
                         <select name="kategori" id="" class="form-select">
                             <option value="">Pilih Kategori</option>
@@ -72,4 +76,12 @@
     <script src="{{ asset('jquey/dist/jquery.min.js') }}"></script>
     <script src="{{ asset('datatables/datatables.js') }}"></script>
     <script src="{{ asset('sweetalert2.min\sweetalert2.min.js') }}"></script>
+    <script src="{{ asset('ckeditor5-build-classic/ckeditor.js') }}"></script>
+    <script>
+        ClassicEditor
+            .create(document.querySelector('#editor'))
+            .catch(error => {
+                console.error(error);
+            });
+    </script>
 @endpush

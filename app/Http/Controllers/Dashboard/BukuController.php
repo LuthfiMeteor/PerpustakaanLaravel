@@ -47,6 +47,7 @@ class BukuController extends Controller
     }
     public function create(Request $request)
     {
+        // dd($request->all());
         $request->validate([
             'judul' => 'required',
             'kategori' => 'required',
@@ -55,6 +56,7 @@ class BukuController extends Controller
             'penulis' => 'required',
             'penerbit' => 'required',
             'tahunTerbit' => 'required',
+            'deskripsi' => 'required',
         ]);
 
         DB::beginTransaction();
@@ -65,6 +67,7 @@ class BukuController extends Controller
             $buku->penulis = $request->penulis;
             $buku->penerbit = $request->penerbit;
             $buku->tahunTerbit = $request->tahunTerbit;
+            $buku->deskripsi = $request->deskripsi;
 
             if ($request->hasFile('gambarCover')) {
                 $file = $request->file('gambarCover');
@@ -108,6 +111,7 @@ class BukuController extends Controller
             'penulis' => 'required',
             'penerbit' => 'required',
             'tahunTerbit' => 'required',
+            'deskripsi' => 'required',
         ]);
 
         DB::beginTransaction();
@@ -118,6 +122,7 @@ class BukuController extends Controller
             $buku->penulis = $request->penulis;
             $buku->penerbit = $request->penerbit;
             $buku->tahunTerbit = $request->tahunTerbit;
+            $buku->deskripsi = $request->deskripsi;
 
             if ($request->hasFile('gambarCover')) {
                 $file = $request->file('gambarCover');
